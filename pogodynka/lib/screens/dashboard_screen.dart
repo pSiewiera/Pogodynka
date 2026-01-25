@@ -44,10 +44,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  // --- NOWOŚĆ: USUWANIE KONTA ---
+  Future<void> _deleteAccount() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1F2937),
+        title: const Text("Usunąć konto?", style: TextStyle(color: Colors.white)),
+        content: const Text("To usunie wszystkie Twoje stacje i dane bezpowrotnie.", style: TextStyle(color: Colors.white70)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text("Anuluj")),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text("USUŃ", style: TextStyle(color: Colors.red))),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      try {
+        await http.delete(
+          Uri.parse('$_baseUrl/delete-account'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'userId': widget.currentUser.id}),
+        );
+        if (mounted) {
+           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Konto usunięte.')));
+           // Tu nastąpiłby powrót do logowania (zależne od Main.dart)
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
   Future<void> _deleteStation(String id) async {
     final roleId = widget.currentUser.role == UserRole.admin ? 1 : 2;
     try {
- 
       await http.delete(Uri.parse('$_baseUrl/stations/$id?userId=${widget.currentUser.id}&roleId=$roleId'));
       _fetchStations();
       if(mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Usunięto stację')));
@@ -155,6 +186,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
+      // DODAŁEM APP BAR Z KOSZEM
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text("Moje Stacje"),
+        actions: [
+           IconButton(
+             icon: const Icon(Icons.delete_forever, color: Colors.redAccent),
+             tooltip: "Usuń konto",
+             onPressed: _deleteAccount,
+           )
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddDialog,
         backgroundColor: Colors.blue,

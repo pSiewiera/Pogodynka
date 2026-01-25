@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; 
 import '../models.dart';
+import 'register_screen.dart'; // <--- DODAJ IMPORT
 
 class LoginScreen extends StatefulWidget {
   final void Function(AppUser user) onLogin;
@@ -28,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isLoading = false;
   String? _errorText;
+  final String _baseUrl = 'http://localhost:8080';
 
   @override
   void dispose() {
@@ -46,9 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final String password = _passwordController.text;
 
     try {
-
-      
-     final url = Uri.parse('http://localhost:8080/login');
+      final url = Uri.parse('$_baseUrl/login');
 
       final response = await http.post(
         url,
@@ -98,7 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
- 
     return Scaffold(
       backgroundColor: const Color(0xFF050816),
       body: Center(
@@ -173,6 +172,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                 ),
+              ),
+              // --- GUZIK REJESTRACJI ---
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => const RegisterScreen()));
+                },
+                child: const Text("Nie masz konta? Zarejestruj się", style: TextStyle(color: Colors.blueAccent)),
               ),
             ],
           ),

@@ -14,7 +14,6 @@ class AppUser {
     required this.role,
   });
 }
-
 class Station {
   final String id;
   final String name;
@@ -22,6 +21,7 @@ class Station {
   final StationType type;
   final bool isPublic;
   final int ownerId;
+  final bool maAlert; // <--- Polskie pole
 
   const Station({
     required this.id,
@@ -30,6 +30,7 @@ class Station {
     required this.type,
     this.isPublic = true,
     required this.ownerId,
+    this.maAlert = false,
   });
 
   factory Station.fromJson(Map<String, dynamic> json) {
@@ -40,6 +41,7 @@ class Station {
       type: json['type'] == 'mobile' ? StationType.mobile : StationType.staticStation,
       isPublic: json['isPublic'] ?? true,
       ownerId: json['ownerId'] ?? 0,
+      maAlert: json['ma_alert'] ?? false, // Pobieramy z bazy
     );
   }
 }
