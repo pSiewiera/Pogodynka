@@ -16,7 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   
   bool _isLoading = false;
   String? _errorMsg;
-  final String _baseUrl = 'http://localhost:8080'; // Ustaw na 10.0.2.2 dla Androida
+  final String _baseUrl = 'http://localhost:8080'; //10.0.2.2 dla Androida
 
   Future<void> _register() async {
     final email = _emailCtrl.text.trim();

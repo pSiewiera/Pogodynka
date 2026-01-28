@@ -68,7 +68,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         );
         if (mounted) {
            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Konto usunięte.')));
-           // Tu nastąpiłby powrót do logowania (zależne od Main.dart)
         }
       } catch (e) {
         print(e);
