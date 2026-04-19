@@ -6,6 +6,7 @@ import 'screens/dashboard_screen.dart';
 import 'screens/routes_screen.dart';
 import 'screens/alerts_screen.dart';
 //veve
+int index=5;
 void main() {
   runApp(const WeatherAppUI());
 }
